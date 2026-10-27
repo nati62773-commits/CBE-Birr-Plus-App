@@ -10,7 +10,7 @@ import 'package:cbe/widgets/home_screen_app_bar.dart';
 import 'package:cbe/widgets/image_slider_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key}); // <--- THIS IS THE MAGIC LINE THAT WAS MISSING
+  const HomeScreen({super.key}); // <--- This line is the fix!
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
