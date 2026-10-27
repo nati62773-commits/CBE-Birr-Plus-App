@@ -19,26 +19,30 @@ jobs:
       - name: Regenerate Android project
         run: flutter create . --project-name cbe --platforms android
 
-      # THIS IS THE FIX: Inject namespace into all sub-projects
-      - name: Fix Missing Namespaces
+      # THIS IS THE CORRECTED FIX: Correct block order
+      - name: Fix Missing Namespaces (Correct Order)
         run: |
-          echo "" >> android/build.gradle
-          echo "subprojects {" >> android/build.gradle
-          echo "    afterEvaluate { project ->" >> android/build.gradle
-          echo "        if (project.hasProperty('android')) {" >> android/build.gradle
-          echo "            project.android {" >> android/build.gradle
-          echo "                if (namespace == null) {" >> android/build.gradle
-          echo "                    namespace project.group" >> android/build.gradle
-          echo "                }" >> android/build.gradle
-          echo "            }" >> android/build.gradle
-          echo "        }" >> android/build.gradle
-          echo "    }" >> android/build.gradle
-          echo "}" >> android/build.gradle
+          cat >> android/build.gradle << 'EOF'
+
+          subprojects {
+              afterEvaluate { project ->
+                  if (project.hasProperty('android')) {
+                      project.android {
+                          if (namespace == null) {
+                              namespace project.group
+                          }
+                      }
+                  }
+              }
+          }
+
+          subprojects {
+              project.evaluationDependsOn(':app')
+          }
+          EOF
 
       - run: flutter pub get
       - run: dart run flutter_launcher_icons
-      
-      # Using a Gradle property to disable shrinking safely
       - run: flutter build apk --release -PshrinkResources=false
       
       - uses: actions/upload-artifact@v4
