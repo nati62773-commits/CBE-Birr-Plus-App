@@ -19,11 +19,36 @@ jobs:
       - name: Regenerate Android project
         run: flutter create . --project-name cbe --platforms android
 
-      # THIS IS THE CORRECTED FIX: Correct block order
+      # THE FIX: Write the correct order into android/build.gradle
       - name: Fix Missing Namespaces (Correct Order)
         run: |
-          cat >> android/build.gradle << 'EOF'
+          cat > android/build.gradle << 'EOF'
+          buildscript {
+              ext.kotlin_version = '1.9.22'
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.3.0'
+                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+              }
+          }
 
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+
+          rootProject.buildDir = '../build'
+
+          subprojects {
+              project.buildDir = "${rootProject.buildDir}/${project.name}"
+          }
+
+          // THIS BLOCK MUST COME FIRST
           subprojects {
               afterEvaluate { project ->
                   if (project.hasProperty('android')) {
@@ -36,8 +61,13 @@ jobs:
               }
           }
 
+          // THIS BLOCK MUST COME AFTER
           subprojects {
               project.evaluationDependsOn(':app')
+          }
+
+          tasks.register("clean", Delete) {
+              delete rootProject.buildDir
           }
           EOF
 
