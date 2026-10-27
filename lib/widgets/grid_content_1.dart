@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// Import your new Send Money screen here
 import 'package:cbe/screens/send_money.dart'; 
+import 'package:cbe/screens/airtime_screen.dart'; // Imported the new Airtime screen
 
 class GridContent1 extends StatelessWidget {
   GridContent1({super.key});
@@ -30,23 +30,31 @@ class GridContent1 extends StatelessWidget {
         childAspectRatio: 1,
       ),
       itemBuilder: (context, index) {
-        // WE ADDED GestureDetector HERE TO MAKE IT CLICKABLE
         return GestureDetector(
           onTap: () {
-            // This is the logic that checks which button you tapped
             String buttonText = gridItems[index]["text"];
             
-            if (buttonText == "Send Money") {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SendMoneyScreen(),
-                ),
+            // Logic to open the correct screen
+            if (buttonText == "Send Money" || buttonText == "To CBE Acct") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SendMoneyScreen()));
+            } else if (buttonText == "Air Time" || buttonText == "Airtime Package") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AirtimeScreen()));
+            } else {
+              // For the rest, show a "Coming Soon" popup so it's clickable
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(buttonText),
+                  content: const Text("This feature is coming soon!"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context), 
+                      child: const Text("OK")
+                    )
+                  ],
+                )
               );
-            } 
-            // Later, we can add more here like:
-            // else if (buttonText == "Air Time") { Navigator.push(...) }
-            
+            }
           },
           child: Container(
             decoration: BoxDecoration(
