@@ -12,19 +12,39 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
-          
-      # This deletes the old broken Android folder
-      - name: Delete old Android folder
+
+      # 1. Completely remove the broken Android folder
+      - name: Remove old Android folder
         run: rm -rf android
-        
-      # This creates a brand new Android folder that works with Flutter 3.22
+
+      # 2. Generate a fresh Android folder
       - name: Regenerate Android project
         run: flutter create . --project-name cbe --platforms android
-        
+
+      # 3. Force the correct namespace and applicationId
+      - name: Fix namespace in build.gradle
+        run: |
+          sed -i 's/namespace = ".*"/namespace = "com.example.cbe"/' android/app/build.gradle
+          sed -i 's/applicationId = ".*"/applicationId = "com.example.cbe"/' android/app/build.gradle
+
+      # 4. Ensure MainActivity has the correct package
+      - name: Fix MainActivity package name
+        run: |
+          mkdir -p android/app/src/main/kotlin/com/example/cbe
+          cat > android/app/src/main/kotlin/com/example/cbe/MainActivity.kt << 'EOF'
+          package com.example.cbe
+
+          import io.flutter.embedding.android.FlutterActivity
+
+          class MainActivity: FlutterActivity() {
+          }
+          EOF
+
+      # 5. Clean and build
       - run: flutter pub get
-      - run: dart run flutter_launcher_icons
+      - run: flutter clean
       - run: flutter build apk --release
-      
+
       - uses: actions/upload-artifact@v4
         with:
           name: app-release
