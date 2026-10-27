@@ -8,6 +8,8 @@ import 'package:cbe/widgets/cbe_card.dart';
 import 'package:cbe/widgets/grid_content_1.dart';
 import 'package:cbe/widgets/home_screen_app_bar.dart';
 import 'package:cbe/widgets/image_slider_indicator.dart';
+// We add the import for your new Send Money screen here
+import 'package:cbe/screens/send_money.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 const HomeAppBar(),
-                Divider(
+                const Divider(
                   color: Constants.white,
                   thickness: 0.2,
                 ),
@@ -115,16 +117,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 12,
                               ),
-                              GridContent1(),
+                              // THIS IS WHERE THE BUTTONS LIVE!
+                              GridContent1(), 
                               const SizedBox(
                                 height: 30,
                               ),
                               CarouselSlider(
                                 options: CarouselOptions(
-                                  aspectRatio: 4 /
-                                      1, // Adjusted for a wider image, reducing height
-                                  viewportFraction:
-                                      1.0, // Ensures one full-width image at a time
+                                  aspectRatio: 4 / 1, 
+                                  viewportFraction: 1.0,
                                   onPageChanged: (index, reason) {
                                     setState(() {
                                       _currentIndex = index;
@@ -143,14 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: Colors.transparent,
                                         ),
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              8.0), // Optional rounded corners
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                           child: Image.asset(
                                             image,
-                                            fit: BoxFit
-                                                .cover, // Ensures the image fills the width
-                                            height:
-                                                120, // Reduced height for the image
+                                            fit: BoxFit.cover,
+                                            height: 120,
                                             width: MediaQuery.of(context)
                                                 .size
                                                 .width,
@@ -165,6 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 carouselImages: carouselImages,
                                 currentIndex: _currentIndex,
                               ),
+                              // THIS IS WHERE THE SECOND SET OF BUTTONS LIVE!
                               GridContent2(),
                               const SizedBox(
                                 height: 90,
@@ -183,7 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(143, 39, 143, 1),
-        onPressed: () {},
+        onPressed: () {
+          // We can make the QR button do something later
+        },
         child: const Icon(
           FontAwesomeIcons.qrcode,
           color: Colors.white,
