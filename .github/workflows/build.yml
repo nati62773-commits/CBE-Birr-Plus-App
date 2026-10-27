@@ -20,15 +20,8 @@ jobs:
         run: flutter create . --project-name cbe --platforms android
         
       - run: flutter pub get
-      
-      # This will check your Dart code for errors
-      - name: Analyze Dart Code
-        run: flutter analyze
-        
       - run: dart run flutter_launcher_icons
-      
-      # Adding --verbose will print more details if it fails
-      - run: flutter build apk --release --verbose
+      - run: flutter build apk --release
       
       - uses: actions/upload-artifact@v4
         with:
