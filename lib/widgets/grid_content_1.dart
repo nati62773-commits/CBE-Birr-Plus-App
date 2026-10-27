@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// Import your new Send Money screen here
+import 'package:cbe/screens/send_money.dart'; 
 
 class GridContent1 extends StatelessWidget {
   GridContent1({super.key});
@@ -28,39 +30,58 @@ class GridContent1 extends StatelessWidget {
         childAspectRatio: 1,
       ),
       itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 1,
-                offset: Offset(0, 1),
-              ),
-            ],
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    gridItems[index]["icon"],
-                    color: const Color.fromRGBO(143, 39, 143, 1),
-                    size: 25,
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    gridItems[index]["text"],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+        // WE ADDED GestureDetector HERE TO MAKE IT CLICKABLE
+        return GestureDetector(
+          onTap: () {
+            // This is the logic that checks which button you tapped
+            String buttonText = gridItems[index]["text"];
+            
+            if (buttonText == "Send Money") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SendMoneyScreen(),
+                ),
+              );
+            } 
+            // Later, we can add more here like:
+            // else if (buttonText == "Air Time") { Navigator.push(...) }
+            
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 1,
+                  offset: Offset(0, 1),
+                ),
+              ],
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      gridItems[index]["icon"],
+                      color: const Color.fromRGBO(143, 39, 143, 1),
+                      size: 25,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 15),
+                    Text(
+                      gridItems[index]["text"],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
