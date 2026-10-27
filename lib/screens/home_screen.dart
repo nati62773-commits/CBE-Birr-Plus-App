@@ -1,119 +1,188 @@
+import 'package:cbe/utils/constants.dart';
+import 'package:cbe/widgets/grid_content_2.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-class SendMoneyScreen extends StatefulWidget {
-  const SendMoneyScreen({super.key});
+import 'package:cbe/widgets/cbe_card.dart';
+import 'package:cbe/widgets/grid_content_1.dart';
+import 'package:cbe/widgets/home_screen_app_bar.dart';
+import 'package:cbe/widgets/image_slider_indicator.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key}); // <--- THIS IS THE MAGIC LINE THAT WAS MISSING
 
   @override
-  State<SendMoneyScreen> createState() => _SendMoneyScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _SendMoneyScreenState extends State<SendMoneyScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _accountController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
-
-  void _processTransfer() {
-    if (_formKey.currentState!.validate()) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Column(
-              children: [
-                Icon(Icons.check_circle, color: Colors.green, size: 70),
-                SizedBox(height: 10),
-                Text("Transfer Successful", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
-              ],
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Transaction Details:", style: TextStyle(fontWeight: FontWeight.bold)),
-                const Divider(),
-                Text("To Account: ${_accountController.text}"),
-                const SizedBox(height: 5),
-                Text("Amount: ETB ${_amountController.text}"),
-                const SizedBox(height: 5),
-                const Text("Fee: ETB 0.00"),
-                const SizedBox(height: 5),
-                const Text("Total: Paid", style: TextStyle(color: Colors.green)),
-                const SizedBox(height: 15),
-                const Text("Transaction ID:", style: TextStyle(fontWeight: FontWeight.bold)),
-                const Text("FT26123456789", style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 15),
-                const Text("Date:", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(DateTime.now().toString().substring(0, 16), style: const TextStyle(color: Colors.grey)),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close receipt
-                  Navigator.pop(context); // Go back to home
-                },
-                child: const Text("Done", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+  List<String> carouselImages = const [
+    'assets/images/home_ban1.jpg',
+    'assets/images/home_ban2.jpg',
+    'assets/images/home_ban3.jpg',
+    'assets/images/home_ban4.jpg',
+    'assets/images/home_ban5.jpg',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF9C27B0),
-        title: const Text("Send Money"),
-        foregroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _accountController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Receiver's Account / Phone",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
-                ),
-                validator: (value) => value!.isEmpty ? "Please enter account number" : null,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromRGBO(143, 39, 143, 1),
+                  Color.fromRGBO(143, 39, 143, 0.3),
+                  Colors.white54,
+                  Colors.white,
+                ],
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _amountController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Amount (ETB)",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.attach_money),
-                ),
-                validator: (value) => value!.isEmpty ? "Please enter amount" : null,
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF9C27B0),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
-                  onPressed: _processTransfer,
-                  child: const Text("Send Money", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ],
+            ),
           ),
+          SafeArea(
+            child: Column(
+              children: [
+                const HomeAppBar(),
+                const Divider(
+                  color: Constants.white,
+                  thickness: 0.2,
+                ),
+                const CbeCard(),
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                          child: Column(
+                            children: [
+                              const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Mekedonia",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromRGBO(143, 39, 143, 1),
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_right,
+                                        color: Colors.purple,
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Transaction Detail",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromRGBO(143, 39, 143, 1),
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_right,
+                                        color: Colors.purple,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              GridContent1(),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              CarouselSlider(
+                                options: CarouselOptions(
+                                  aspectRatio: 4 / 1,
+                                  viewportFraction: 1.0,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _currentIndex = index;
+                                    });
+                                  },
+                                ),
+                                items: carouselImages.map((image) {
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.transparent,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.asset(
+                                            image,
+                                            fit: BoxFit.cover,
+                                            height: 120,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                              ImageSliderIndicator(
+                                carouselImages: carouselImages,
+                                currentIndex: _currentIndex,
+                              ),
+                              GridContent2(),
+                              const SizedBox(
+                                height: 90,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(143, 39, 143, 1),
+        onPressed: () {},
+        child: const Icon(
+          FontAwesomeIcons.qrcode,
+          color: Colors.white,
         ),
       ),
     );
