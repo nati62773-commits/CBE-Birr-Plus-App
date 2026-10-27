@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cbe/screens/generic_pay_screen.dart'; // Added this import
 
 class PayScreen extends StatefulWidget {
   const PayScreen({super.key});
@@ -101,11 +102,13 @@ class _PayScreenState extends State<PayScreen> {
                   var mObj = payArr[index] as Map? ?? {};
                   return InkWell(
                     onTap: () {
-                      // Navigate to the respective screen
+                      // NAVIGATE TO THE NEW GENERIC SCREEN
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => mObj["screen"] ?? Container(),
+                          builder: (context) => GenericPayScreen(
+                            title: mObj["name"] ?? "Payment", // Passes "Electricity", "Water", etc.
+                          ),
                         ),
                       );
                     },
@@ -124,6 +127,13 @@ class _PayScreenState extends State<PayScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 3,
+                                offset: const Offset(0, 2),
+                              )
+                            ],
                           ),
                           child: Row(
                             children: [
@@ -132,7 +142,7 @@ class _PayScreenState extends State<PayScreen> {
                                 width: 45,
                                 height: 45,
                                 decoration: const BoxDecoration(
-                                  color: Colors.purple,
+                                  color: Color.fromRGBO(143, 39, 143, 1),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
