@@ -13,6 +13,11 @@ jobs:
         with:
           flutter-version: '3.22.0'
       - run: flutter pub get
+      - run: dart run flutter_launcher_icons
+      - name: Fix Gradle, AGP, and Kotlin versions
+        run: |
+          dart pub global activate flutterfix
+          flutterfix sync --original
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
