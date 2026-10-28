@@ -18,62 +18,10 @@ jobs:
         
       - name: Regenerate Android project
         run: flutter create . --project-name cbe --platforms android
-
-      # THE FIX: Write the correct order into android/build.gradle
-      - name: Fix Missing Namespaces (Correct Order)
-        run: |
-          cat > android/build.gradle << 'EOF'
-          buildscript {
-              ext.kotlin_version = '1.9.22'
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.3.0'
-                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-              }
-          }
-
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-
-          rootProject.buildDir = '../build'
-
-          subprojects {
-              project.buildDir = "${rootProject.buildDir}/${project.name}"
-          }
-
-          // THIS BLOCK MUST COME FIRST
-          subprojects {
-              afterEvaluate { project ->
-                  if (project.hasProperty('android')) {
-                      project.android {
-                          if (namespace == null) {
-                              namespace project.group
-                          }
-                      }
-                  }
-              }
-          }
-
-          // THIS BLOCK MUST COME AFTER
-          subprojects {
-              project.evaluationDependsOn(':app')
-          }
-
-          tasks.register("clean", Delete) {
-              delete rootProject.buildDir
-          }
-          EOF
-
+        
       - run: flutter pub get
       - run: dart run flutter_launcher_icons
-      - run: flutter build apk --release -PshrinkResources=false
+      - run: flutter build apk --release
       
       - uses: actions/upload-artifact@v4
         with:
