@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const HomeAppBar(),
                 const Divider(
-                  color: Constants.white,
+                  color: Constants.white, // Now safe because Constants is defined
                   thickness: 0.2,
                 ),
                 const CbeCard(),
@@ -72,18 +72,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                           child: Column(
                             children: [
-                              const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Row( // Removed 'const' from here to prevent invalid constant errors
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
-                                    children: [
+                                    children: const [
                                       Text(
                                         "Mekedonia",
                                         style: TextStyle(
                                           fontSize: 15,
-                                          color:
-                                              Color.fromRGBO(143, 39, 143, 1),
+                                          color: Color.fromRGBO(143, 39, 143, 1),
                                           fontWeight: FontWeight.w900,
                                         ),
                                       ),
@@ -94,13 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: const [
                                       Text(
                                         "Transaction Detail",
                                         style: TextStyle(
                                           fontSize: 15,
-                                          color:
-                                              Color.fromRGBO(143, 39, 143, 1),
+                                          color: Color.fromRGBO(143, 39, 143, 1),
                                           fontWeight: FontWeight.w900,
                                         ),
                                       ),
@@ -133,23 +130,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return Builder(
                                     builder: (BuildContext context) {
                                       return Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        width: MediaQuery.of(context).size.width,
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10.0),
                                         decoration: const BoxDecoration(
                                           color: Colors.transparent,
                                         ),
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                           child: Image.asset(
                                             image,
                                             fit: BoxFit.cover,
                                             height: 120,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                            width: MediaQuery.of(context).size.width,
                                           ),
                                         ),
                                       );
