@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  
-  static Color get white => const Color(0xffffffff);
-  static Color get black => const Color(0xff000000);
-
+  static const Color white = Colors.white;
+  static const Color purple = Color.fromRGBO(143, 39, 143, 1);
 }
