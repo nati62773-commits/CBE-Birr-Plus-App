@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:cbe/screens/phone_transfer_screen.dart'; // Imports the Transfer Screen
+import 'package:cbe/screens/phone_transfer_screen.dart'; // Points to the correct screen
 
 class GridContent1 extends StatelessWidget {
   GridContent1({super.key});
@@ -33,14 +33,14 @@ class GridContent1 extends StatelessWidget {
           onTap: () {
             String buttonText = gridItems[index]["text"];
             
-            // If you click Send Money, it opens the new Phone Transfer screen
+            // Logic for top grid buttons
             if (buttonText == "Send Money" || buttonText == "To CBE Acct") {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const PhoneTransferScreen()),
               );
             } else {
-              // For the rest, show a "Coming Soon" popup
+              // Coming Soon popup for the rest
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
